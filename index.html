@@ -146,7 +146,7 @@
     <div id="cursor-follower" class="cursor-follower"></div>
 
     <!-- Header (Fixed) -->
-    <header class="fixed top-0 left-0 w-full flex justify-center items-center py-6 z-20 pointer-events-none">
+    <header id="main-header" class="fixed top-0 left-0 w-full flex justify-center items-center py-6 z-20 pointer-events-none transition-all duration-500 ease-in-out">
         <h3 class="text-2xl font-extrabold tracking-tight text-white drop-shadow-md">Let'sYap <span class="text-xs font-normal opacity-60 ml-1">v2.5</span></h3>
     </header>
 
@@ -194,7 +194,7 @@
                 </button>
             </div>
             <div class="text-center mt-3">
-                <p class="text-[10px] text-gray-400 font-medium">Powered by Google Gemini 2.5 Pro</p>
+                <p class="text-[10px] text-gray-400 font-medium">&bull; Developed by Sooriyaa (Ryz.)</p>
             </div>
         </div>
     </footer>
@@ -244,7 +244,8 @@
             trailerModal: document.getElementById('trailer-modal'),
             closeModal: document.getElementById('close-modal'),
             iframe: document.getElementById('trailer-iframe'),
-            chips: document.querySelectorAll('.suggestion-chip')
+            chips: document.querySelectorAll('.suggestion-chip'),
+            header: document.getElementById('main-header')
         };
 
         // ==========================================
@@ -284,6 +285,19 @@ You are Let'sYap, an intelligent AI movie recommender.
                 });
             });
 
+            // Header Scroll Logic
+            els.mainScroll.addEventListener('scroll', () => {
+                // If we are not in IDLE state (meaning chat is open), keep it hidden
+                if (currentState !== STATE.IDLE) return;
+
+                // Fade out header on scroll
+                if (els.mainScroll.scrollTop > 20) {
+                    els.header.classList.add('opacity-0', '-translate-y-10');
+                } else {
+                    els.header.classList.remove('opacity-0', '-translate-y-10');
+                }
+            });
+
             setupCursor();
         }
 
@@ -295,9 +309,13 @@ You are Let'sYap, an intelligent AI movie recommender.
             if (!text) return;
 
             els.input.value = '';
+            
             // Hide initial view nicely
             els.initialView.classList.add('hidden');
             els.initialView.style.display = 'none'; // Enforce hide
+            
+            // HIDE HEADER PERMANENTLY ON CHAT START
+            els.header.classList.add('opacity-0', '-translate-y-10');
             
             addMessage('user', text);
             setLoading(true);
