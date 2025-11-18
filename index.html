@@ -3,95 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Let'sYap</title>
-    <!-- 1. Load Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
-    <!-- 2. Load Google Fonts (Manrope for sans-serif, Lora for serif-italic) --><link rel="preconnect" href="https://fonts.googleapis.com">
+    <title>Let'sYap 2.0</title>
+    <!-- 1. Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 2. Load Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Lora:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
-    <!-- 3. Add marked.js library --><script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Lora:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
+    <!-- 3. Add marked.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
     <style>
-        /* 3. Set default font and custom styles */
+        /* --- GLOBAL STYLES --- */
         body {
             font-family: 'Manrope', sans-serif;
             color: #ffffff;
-            background-color: #0a0a0a; /* Base background */
-            /* Add a subtle overlay to the background image for text contrast */
-            background-blend-mode: multiply;
-            background-color: rgba(0, 0, 0, 0.3);
-            
-            /* NEW: Ensure full height for flex layout */
+            background-color: #0a0a0a;
+            /* Dark overlay for better text contrast on the background image */
+            background-color: rgba(0, 0, 0, 0.5); 
+            background-blend-mode: overlay;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        /* Custom class for the special italic font */
         .font-serif-italic {
             font-family: 'Lora', serif;
             font-style: italic;
-            font-weight: 700; /* Lora's italic often looks best bold */
+            font-weight: 700;
         }
 
-        /* --- Custom scrollbar for main page --- */
-        body::-webkit-scrollbar {
-            width: 8px;
-        }
-        body::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-        }
-        body::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.4);
-            border-radius: 4px;
-        }
-        body::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.6);
-        }
-
-        /* --- UPDATED: Custom scrollbar for the chat window (now main) --- */
-        /* This now applies to the <main> element */
-        .custom-scrollbar::-webkit-scrollbar {
+        /* --- SCROLLBARS --- */
+        ::-webkit-scrollbar {
             width: 6px;
+            height: 6px;
         }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1); /* Match body */
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
             border-radius: 3px;
         }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.4); /* Match body */
-            border-radius: 3px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.6); /* Match body */
-        }
-        
-        /* NEW: Horizontal Scrollbar for carousels */
-        .horizontal-scrollbar::-webkit-scrollbar {
-            height: 4px;
-        }
-        .horizontal-scrollbar::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
-        }
-        .horizontal-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.4);
-            border-radius: 2px;
-        }
-        .horizontal-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.6);
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
         }
 
-
-        /* --- NEW: Elegant spinner animation --- */
+        /* --- ANIMATIONS --- */
         .elegant-spinner {
-            width: 20px; /* Size of the spinner */
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
-            border: 3px solid rgba(255, 255, 255, 0.2); /* Light grey track */
-            border-top-color: #ffffff; /* White loading part */
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-top-color: #ffffff;
             animation: spin 1s linear infinite;
-            margin-left: 12px; /* Add some space from the text */
+            margin-left: 10px;
         }
 
         @keyframes spin {
@@ -99,992 +65,717 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* --- NEW: Custom Cursor --- */
-        /* MODIFIED: Default cursor is back for mobile-first */
-        body, a, button, label[for], input[type=radio] {
-            /* cursor: none; <-- REMOVED */
-            cursor: default; /* Use system cursor */
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
         }
 
-        .cursor-dot,
-        .cursor-follower {
-            position: fixed;
-            top: 0;
-            left: 0;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            mix-blend-mode: difference;
-            background-color: #ffffff;
-            transition: width 0.2s ease-out, height 0.2s ease-out; 
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .cursor-dot {
-            width: 8px;
-            height: 8px;
+        /* --- CUSTOM CURSOR (Desktop Only) --- */
+        @media (min-width: 769px) {
+            body, a, button, input {
+                cursor: none;
+            }
+            .cursor-dot, .cursor-follower {
+                position: fixed;
+                top: 0;
+                left: 0;
+                transform: translate(-50%, -50%);
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 9999;
+                mix-blend-mode: exclusion;
+                background-color: white;
+            }
+            .cursor-dot { width: 8px; height: 8px; }
+            .cursor-follower { 
+                width: 30px; height: 30px; 
+                background-color: rgba(255,255,255,0.2);
+                transition: width 0.2s, height 0.2s, transform 0.1s;
+            }
         }
-
-        .cursor-follower {
-            width: 30px;
-            height: 30px;
-            filter: saturate(0);
-            transition: transform 0.15s ease-out, width 0.2s ease-out, height 0.2s ease-out;
-        }
-        
-        /* NEW: Hide custom cursor on mobile devices */
         @media (max-width: 768px) {
-            .cursor-dot,
-            .cursor-follower {
-                display: none;
-            }
-            /* Restore default cursor behavior on mobile */
-            body, a, button, label[for], input[type=radio] {
-                cursor: default;
-            }
+            .cursor-dot, .cursor-follower { display: none; }
         }
 
-
-        /* --- NEW: Modal Styles --- */
+        /* --- MODAL --- */
         .modal {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 10000;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+            transition: all 0.3s ease;
         }
-
-        .modal.open {
-            opacity: 1;
-            visibility: visible;
-        }
-
+        .modal.open { opacity: 1; visibility: visible; }
+        
         .modal-content {
-            background-color: #1a1a1a;
-            padding: 0;
-            border-radius: 10px;
-            width: 90vw; 
+            width: 90vw;
             max-width: 900px;
-            position: relative;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            background: #111;
+            border-radius: 12px;
             overflow: hidden;
-        }
-
-        .modal-close-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.5);
-            border: none;
-            font-size: 24px;
-            color: #ffffff;
-            cursor: pointer;
-            z-index: 10001; /* Ensure it's above the iframe */
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            line-height: 32px;
-            text-align: center;
-        }
-
-        .video-container {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             position: relative;
-            width: 100%;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
             height: 0;
         }
-
-        .video-container iframe {
+        .video-wrapper iframe {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
+            top: 0; left: 0; width: 100%; height: 100%;
         }
-
     </style>
 </head>
-<body class="w-full min-h-screen" style="background-image: url('https://framerusercontent.com/images/34O2HYfrgXuRFoJZrHtUPDH68bE.png?scale-down-to=2048&width=2912&height=1632'); background-size: cover; background-position: center center; background-attachment: fixed;">
+<body class="w-full min-h-screen overflow-hidden" style="background-image: url('https://framerusercontent.com/images/34O2HYfrgXuRFoJZrHtUPDH68bE.png?scale-down-to=2048&width=2912&height=1632'); background-size: cover; background-position: center center;">
 
-    <!-- NEW: Custom Cursor Follower --><div id="cursor-dot" class="cursor-dot"></div>
+    <!-- Custom Cursor -->
+    <div id="cursor-dot" class="cursor-dot"></div>
     <div id="cursor-follower" class="cursor-follower"></div>
 
-    <!-- Main Page Wrapper --><div class="relative min-h-screen w-full flex flex-col text-white">
+    <!-- App Container -->
+    <div class="relative flex flex-col h-screen w-full max-w-5xl mx-auto">
 
-        <!-- Top Navigation --><!-- MODIFIED: Hide on mobile --><nav class="w-full px-6 md:px-12 py-6 flex justify-center items-center z-20 hidden md:flex">
-            <h3 class="text-2xl font-extrabold">Let'sYap</h3>
-        </nav>
+        <!-- Header -->
+        <header class="hidden md:flex justify-center items-center py-6 z-20">
+            <h3 class="text-2xl font-extrabold tracking-tight">Let'sYap <span class="text-xs font-normal opacity-60 ml-1">v2.0</span></h3>
+        </header>
 
-        <!-- Main Content Area --><!-- MODIFIED: Became the main scrolling chat container --><main class="custom-scrollbar flex-1 w-full max-w-4xl mx-auto p-4 md:p-6 overflow-y-auto pb-32">
+        <!-- Main Chat Area -->
+        <main id="main-scroll" class="flex-1 overflow-y-auto w-full px-4 md:px-6 pb-32 pt-12 md:pt-2 scroll-smooth">
             
-            <!-- Initial View (Headline) --><!-- MODIFIED: Now inside main, will be hidden by JS --><div id="initial-view" class="transition-opacity duration-500 ease-in-out text-center pt-24 md:pt-0">
-                <h1 class="text-5xl md:text-7xl font-extrabold text-white text-shadow-lg leading-tight">
-                    The best way to find <br>
-                    <span class="font-serif-italic">your next movie.</span>
+            <!-- Welcome Screen -->
+            <div id="initial-view" class="flex flex-col items-center justify-center h-full min-h-[60vh] text-center transition-all duration-500">
+                <h1 class="text-5xl md:text-7xl font-extrabold text-white leading-tight tracking-tight drop-shadow-lg">
+                    Discover your <br>
+                    <span class="font-serif-italic text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">next favorite movie.</span>
                 </h1>
-                <p class="mt-6 text-lg md:text-xl text-gray-200 max-w-lg mx-auto">
-                    Feeling ready for a movie? Let our AI guide you to the perfect film, no endless scrolling required.
+                <p class="mt-6 text-lg text-gray-300 max-w-lg mx-auto">
+                    Powered by Gemini 2.5 Pro & TMDB. <br> Compare films, find hidden gems, or get personalized picks.
                 </p>
+                
+                <!-- Quick Action Chips -->
+                <div class="mt-8 flex flex-wrap gap-3 justify-center">
+                    <button class="suggestion-chip px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/10 rounded-full text-sm backdrop-blur-md transition-all">Suggest a random movie</button>
+                    <button class="suggestion-chip px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/10 rounded-full text-sm backdrop-blur-md transition-all">Compare Inception vs Interstellar</button>
+                    <button class="suggestion-chip px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/10 rounded-full text-sm backdrop-blur-md transition-all">Find me a Sci-Fi movie</button>
+                </div>
             </div>
 
-            <!-- Chat View (REMOVED) --><!-- NEW: Chat Container --><!-- All chat messages will be appended here --><div id="chat-container" class="w-full h-full space-y-4"></div>
-
-            <!-- 
-                Footer (Styled like "Featured in")
-                MODIFIED: Moved INSIDE main, will be hidden by JS
-            --><footer id="footer-credits" class="w-full flex-shrink-0 p-8 z-10 text-center transition-opacity duration-500 ease-in-out">
-                <div class="w-full max-w-5xl mx-auto flex flex-col items-center gap-4">
-                    
-                    <div class="flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
-                        <span class="text-sm font-medium text-gray-300">Powered by</span>
-                        <span class="text-2xl font-bold text-gray-100 opacity-80">Gemini</span>
-                        <span class="text-2xl font-bold text-gray-100 opacity-80">TMDB</span>
-                    </div>
-
-                    <div class="w-full h-px bg-white/10 my-4 max-w-sm"></div>
-
-                    <div class="text-sm text-gray-400"> <!-- FIXED: class_ to class --><p>Developed by Ryz. (Sooriyaa)</p>
-                        <p class="mt-1">@ All rights reserved</p>
-                    </div>
-                </div>
-            </footer>
+            <!-- Chat Container -->
+            <div id="chat-container" class="w-full space-y-6 max-w-3xl mx-auto"></div>
 
         </main>
- 
-        <!-- 
-            Chat Input Bar
-            MODIFIED: Now FIXED to the bottom of the viewport
-        --><div class="fixed bottom-0 left-0 right-0 w-full flex-shrink-0 p-4 z-20 bg-gradient-to-t from-black/50 via-black/30 to-transparent">
-            <div id="chat-input-container" class="w-full max-w-2xl mx-auto bg-white/10 backdrop-blur-lg rounded-full border border-white/20 shadow-2xl flex items-center p-2 pr-2 md:pr-3">
-                <input type="text" id="user-input" class="flex-1 bg-transparent text-white placeholder-gray-300 px-4 md:px-5 py-3 outline-none min-w-0" placeholder="Say 'hi' or ask for a movie...">
-                
-                <!-- MODIFIED: Responsive Send Button -->
-                <!-- Uses flex to center content, different padding for mobile vs desktop -->
-                <button id="send-button" class="bg-white text-black p-3 md:px-8 md:py-2.5 rounded-full font-bold text-sm hover:bg-gray-200 transition-colors disabled:opacity-50 flex-shrink-0 flex items-center justify-center">
-                    <!-- Icon for Mobile -->
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 md:hidden">
-                        <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
-                    </svg>
-                    <!-- Text for Desktop -->
-                    <span class="hidden md:inline">Send</span>
-                </button>
+
+        <!-- Footer / Input Area -->
+        <footer class="w-full p-4 z-30">
+            <div class="w-full max-w-3xl mx-auto relative">
+                <!-- Input Box -->
+                <div class="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl flex items-center p-2 transition-all focus-within:border-white/30 focus-within:bg-black/60">
+                    <input type="text" id="user-input" 
+                        class="flex-1 bg-transparent text-white placeholder-gray-400 px-4 py-3 outline-none text-base min-w-0" 
+                        autocomplete="off"
+                        placeholder="Ask for a recommendation, comparison, or movie info...">
+                    
+                    <button id="send-button" class="bg-white text-black hover:bg-gray-200 p-3 rounded-xl font-bold transition-colors flex items-center justify-center group disabled:opacity-50 disabled:cursor-not-allowed">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 group-hover:translate-x-0.5 transition-transform">
+                            <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="text-center mt-2">
+                    <p class="text-[10px] text-gray-500">Powered by Google Gemini 2.5 Pro</p>
+                </div>
             </div>
-        </div>
- 
+        </footer>
     </div>
 
-    <!-- NEW: Trailer Modal --><div id="trailer-modal" class="modal">
+    <!-- Video Modal -->
+    <div id="trailer-modal" class="modal">
         <div class="modal-content">
-            <button class="modal-close-button" id="close-modal">&times;</button>
-            <div class="video-container">
-        <div id="trailer-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <button id="close-modal" class="absolute top-4 right-4 z-50 bg-black/50 hover:bg-black/80 text-white rounded-full w-10 h-10 flex items-center justify-center text-2xl backdrop-blur-sm">&times;</button>
+            <div class="video-wrapper">
+                <!-- Updated Iframe with full permissions -->
+                <iframe id="trailer-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </div>
     </div>
-
 
     <script type="module">
-        // --- API KEYS ---
-        // --- IMPORTANT: YOU MUST REPLACE THESE KEYS! ---
-        // The app will not work without valid API keys.
-        // 1. Get your Gemini Key: https://aistudio.google.com/app/apikey
-        // 2. Get your TMDB Key: https://www.themoviedb.org/settings/api (Use the v3 key)
-        
-        const GEMINI_API_KEY = "AIzaSyA_TYda0KfNRZ55ZwI18NmKc3mBeDDiHio";
-        const TMDB_API_KEY = "6c39d6b4242edaf0a6e6f9e4b56eda66";
-        
-        // --- CHATBOT STATE ---
-        const questions = [ // Fallback questions
-            "What's your favorite movie genre (e.g., Sci-Fi, Comedy, Drama)?",
-            "What's a movie you recently watched and loved?",
-            "What are you in the mood for? Something light-hearted, intense, or thought-provoking?",
-            "Do you prefer newer releases or classic films?",
-            "Is there any actor or director you're a big fan of?"
-        ];
+        // ==========================================
+        // CONFIGURATION & API KEYS
+        // ==========================================
+        // REPLACE THESE WITH YOUR ACTUAL KEYS
+        const GEMINI_API_KEY = "AIzaSyA_TYda0KfNRZ55ZwI18NmKc3mBeDDiHio"; 
+        const TMDB_API_KEY = "6c39d6b4242edaf0a6e6f9e4b56eda66"; 
+
+        // ==========================================
+        // STATE MANAGEMENT
+        // ==========================================
+        const STATE = {
+            IDLE: 'IDLE',
+            ASKING_PREFS: 'ASKING_PREFS',
+            CHATTING: 'CHATTING'
+        };
+
+        let currentState = STATE.IDLE;
+        let chatHistory = [];
+        let userPrefs = [];
+        let prefQuestions = [];
         let currentQuestionIndex = 0;
-        let userAnswers = [];
-        let chatHistory = []; // For follow-up conversation
-        let currentLoadingEl = null; // NEW: To track the loading bubble
-        let suggestedMovies = []; // NEW: To store suggested movie data
-        let dynamicQuestions = []; // NEW: To store dynamically generated questions
+        let currentLoadingEl = null;
 
-        // --- DOM ELEMENTS ---
-        const mainScrollArea = document.querySelector('main'); // NEW
-        const initialView = document.getElementById('initial-view');
-        // const chatView = document.getElementById('chat-view'); // REMOVED
-        const chatContainer = document.getElementById('chat-container'); // NEW
-        const userInput = document.getElementById('user-input');
-        const sendButton = document.getElementById('send-button');
-        const footerCredits = document.getElementById('footer-credits'); // NEW
-        
-        // --- NEW: MODAL DOM ELEMENTS ---
-        const trailerModal = document.getElementById('trailer-modal');
-        const closeModalButton = document.getElementById('close-modal');
-        const trailerIframe = document.getElementById('trailer-iframe');
+        // ==========================================
+        // DOM ELEMENTS
+        // ==========================================
+        const els = {
+            mainScroll: document.getElementById('main-scroll'),
+            initialView: document.getElementById('initial-view'),
+            chatContainer: document.getElementById('chat-container'),
+            input: document.getElementById('user-input'),
+            sendBtn: document.getElementById('send-button'),
+            trailerModal: document.getElementById('trailer-modal'),
+            closeModal: document.getElementById('close-modal'),
+            iframe: document.getElementById('trailer-iframe'),
+            chips: document.querySelectorAll('.suggestion-chip')
+        };
 
-        // --- EVENT LISTENERS ---
-        sendButton.addEventListener('click', handleUserResponse);
-        userInput.addEventListener('keyup', (event) => {
-            if (event.key === 'Enter') {
-                handleUserResponse();
-            }
-        });
-
-        // --- NEW: MODAL EVENT LISTENERS ---
-        closeModalButton.addEventListener('click', closeTrailerModal);
-        trailerModal.addEventListener('click', (e) => {
-            if (e.target === trailerModal) { // Close if clicking outside the content
-                closeTrailerModal();
-            }
-        });
-        document.addEventListener('keydown', (e) => { // Close with Escape key
-            if (e.key === 'Escape' && trailerModal.classList.contains('open')) {
-                closeTrailerModal();
-            }
-        });
-
-
-        // --- NEW: CUSTOM CURSOR LOGIC ---
-        const cursorDotEl = document.getElementById('cursor-dot');
-        const cursorFollowerEl = document.getElementById('cursor-follower');
-
-        // Only run custom cursor logic if not on a touch device (basic check)
-        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-        
-        if (!isTouchDevice) {
-            // Restore cursor:none behavior for desktop
-            document.body.style.cursor = 'none';
-            const interactiveElements = document.querySelectorAll('a, button, label[for], input, textarea');
-            interactiveElements.forEach(el => el.style.cursor = 'none');
-
-
-            window.addEventListener('mousemove', (e) => {
-                // No transition on dot, so just set its transform
-                cursorDotEl.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
-                
-                // Follower has transition, so this works perfectly
-                cursorFollowerEl.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
-            });
-
-            // Add hover effects for interactive elements
-            interactiveElements.forEach(el => {
-                el.addEventListener('mouseenter', () => {
-                    cursorFollowerEl.style.width = '45px';
-                    cursorFollowerEl.style.height = '45px';
-                });
-                el.addEventListener('mouseleave', () => {
-                    cursorFollowerEl.style.width = '30px';
-                    cursorFollowerEl.style.height = '30px';
-                });
-            });
-        }
-        
-        // --- END CUSTOM CURSOR LOGIC ---
-
-        // --- NEW HELPER FOR CARD CLICKS ---
-        async function showMovieCardDetails(movieId) {
-            setLoading(true);
-            try {
-                const movieDetails = await fetchMovieDetailsFromTMDB(movieId);
-                if (movieDetails) {
-                    displayMovieDetails(movieDetails);
-                    chatHistory.push({ role: 'model', parts: [{ text: `Here are details on ${movieDetails.title}.` }] });
-                } else {
-                    displayMessage("Sorry, I couldn't fetch the details for that movie.", 'model');
-                }
-            } catch (error) {
-                console.error("Error fetching movie details from card click:", error);
-                displayMessage("Sorry, I ran into an error trying to get those details.", 'model');
-            } finally {
-                setLoading(false);
-            }
-        }
-
-
-        // --- INITIALIZATION ---
+        // ==========================================
+        // INITIALIZATION & EVENTS
+        // ==========================================
         function init() {
-            // System instruction to prime the chat
-            chatHistory.push({
-                role: 'user',
-                parts: [{ text: "You are Let'sYap, a helpful chatbot that asks questions to learn a user's movie taste and then suggests 5 movies. After suggesting movies, you can answer follow-up questions about movies." }]
+            // Check Keys
+            if (GEMINI_API_KEY.includes("YOUR_GEMINI") || TMDB_API_KEY.includes("YOUR_TMDB")) {
+                addMessage('model', "⚠️ **API Keys Missing.** Please open the code file and replace `YOUR_GEMINI_API_KEY_HERE` and `YOUR_TMDB_API_KEY_HERE` with valid keys.");
+                return;
+            }
+
+            // System Prompt setup
+            const systemPrompt = `
+You are Let'sYap, an intelligent AI movie recommender powered by Gemini 2.5 Pro.
+Your goal is to help users find movies.
+1. **Understand Intent**:
+   - COMPARE: Compare two movies.
+   - RANDOM: Suggest one random movie instantly.
+   - RECOMMEND: User wants suggestions based on taste. Ask EXACTLY 3 questions.
+   - SPECIFIC: Info about a specific movie/actor.
+2. **Tone**: Friendly, engaging, concise.
+3. **Output**: Markdown supported.
+            `;
+            chatHistory.push({ role: 'user', parts: [{ text: systemPrompt }] });
+            chatHistory.push({ role: 'model', parts: [{ text: "Understood. I am ready." }] });
+
+            // Event Listeners
+            els.sendBtn.addEventListener('click', handleSend);
+            els.input.addEventListener('keypress', (e) => e.key === 'Enter' && handleSend());
+            
+            // Modal Events
+            els.closeModal.addEventListener('click', closeModal);
+            els.trailerModal.addEventListener('click', (e) => e.target === els.trailerModal && closeModal());
+            document.addEventListener('keydown', (e) => e.key === 'Escape' && closeModal());
+
+            // Chip Events
+            els.chips.forEach(chip => {
+                chip.addEventListener('click', () => {
+                    els.input.value = chip.textContent;
+                    handleSend();
+                });
             });
-             chatHistory.push({
-                role: 'model',
-                parts: [{ text: "I understand. I am Let'sYap. I will guide the user through questions, provide suggestions, and then be ready for further movie discussion." }]
-            });
-            userInput.focus();
+
+            // Cursor Logic (Desktop)
+            setupCursor();
         }
 
-        // --- CORE CHAT LOGIC ---
-        async function handleUserResponse() {
-            // --- NEW: API KEY CHECK ---
-            if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || TMDB_API_KEY === "YOUR_TMDB_API_KEY_HERE") {
-                displayMessage("<strong>Error: API Key Missing!</strong><br>Please open the `index.html` file (lines 332-333) and replace the placeholder API keys (`YOUR_GEMINI_API_KEY_HERE` and `YOUR_TMDB_API_KEY_HERE`) with your own valid keys to use the app.", 'model');
-                userInput.value = ''; // Clear input just in case
-                return; // Stop execution if keys are missing
-            }
-            // --- END NEW CHECK ---
+        // ==========================================
+        // CORE LOGIC FLOW
+        // ==========================================
+        async function handleSend() {
+            const text = els.input.value.trim();
+            if (!text) return;
 
-            const text = userInput.value.trim();
-            if (text === '') return;
-
-            userInput.value = '';
-            // setLoading(true); // <-- MOVED to be more granular
-
-            // --- Schemas defined once for reuse ---
-            const movieTitleExtractionInstruction = {
-                parts: [{ text: "You are a query analyzer. Analyze the user's last message. If they seem to be asking for details about a *specific movie title*, extract that title. If it's just general chat, return an empty string for the title." }]
-            };
-            const movieTitleExtractionSchema = {
-                type: "OBJECT",
-                properties: { "movieTitle": { "type": "STRING" } },
-                required: ["movieTitle"]
-            };
+            // UI Updates
+            els.input.value = '';
+            els.initialView.style.display = 'none'; // Hide welcome screen
+            addMessage('user', text);
+            setLoading(true);
 
             try {
-                // --- 1. NEW: First Message / Pre-Suggestion Phase ---
-                if (currentQuestionIndex === 0) { 
-                    
-                    // Hide initial UI elements
-                    initialView.classList.add('opacity-0', 'h-0', 'hidden');
-                    footerCredits.classList.add('opacity-0', 'hidden');
+                // FLOW CONTROL BASED ON STATE
+                if (currentState === STATE.ASKING_PREFS) {
+                    await handlePreferenceAnswer(text);
+                } else {
+                    // Determine Intent for new queries
+                    const analysis = await classifyIntent(text);
+                    console.log("Intent Analysis:", analysis);
 
-                    displayMessage(text, 'user'); // <-- Step 1: Display user message
-                    setLoading(true); // <-- Step 2: Show "Thinking"
-                    chatHistory.push({ role: 'user', parts: [{ text }] });
-
-                    // --- NEW LOGIC: Check for specific movie title FIRST ---
-                    const titleAnalysis = await callGeminiAPI(chatHistory, movieTitleExtractionInstruction, movieTitleExtractionSchema);
-
-                    if (titleAnalysis && titleAnalysis.movieTitle && titleAnalysis.movieTitle.trim() !== "") {
-                        // --- 1A. User asked for a specific movie ---
-                        await searchAndDisplayMovie(titleAnalysis.movieTitle);
-                        // CRITICAL: Set index to "follow-up" phase
-                        currentQuestionIndex = (dynamicQuestions.length || questions.length) + 1; 
-                        userInput.placeholder = "Ask me about another movie!";
-
-                    } else {
-                        // --- 1B. No specific movie found, check for generic suggestion intent ---
-                        const intentAnalysisInstruction = {
-                            parts: [{ text: "You are an intent classifier. Analyze the user's last message. Determine if they are asking for a movie, anime, or show suggestion (e.g., 'suggest a movie', 'I want to watch something', 'find me an anime', 'any good Tamil movies?')." }]
-                        };
-                        const intentAnalysisSchema = {
-                            type: "OBJECT",
-                            properties: { "wantsSuggestion": { "type": "BOOLEAN" } },
-                            required: ["wantsSuggestion"]
-                        };
-
-                        const analysis = await callGeminiAPI(chatHistory, intentAnalysisInstruction, intentAnalysisSchema);
-
-                        if (analysis && analysis.wantsSuggestion) {
-                            // --- 1B-i. User wants a suggestion ---
-                            const introMessage = "Great! Let's get started. I'll ask you a few questions to understand your movie preferences.";
-                            displayMessage(introMessage, 'model');
-                            chatHistory.push({ role: 'model', parts: [{ text: introMessage }] });
-
-                            await generateDynamicQuestions(); 
-                            
-                            if (dynamicQuestions.length > 0) {
-                                const firstQuestion = dynamicQuestions[currentQuestionIndex];
-                                displayMessage(firstQuestion, 'model');
-                                chatHistory.push({ role: 'model', parts: [{ text: firstQuestion }] });
-                                currentQuestionIndex++; // <-- This is the crucial step
-                                userInput.placeholder = "Type your answer..."; 
-                            } else {
-                                // Fallback
-                                displayMessage("It looks like I'm having trouble coming up with new questions right now. Let's use some standard ones.", 'model');
-                                dynamicQuestions = [...questions];
-                                const firstQuestion = dynamicQuestions[currentQuestionIndex];
-                                displayMessage(firstQuestion, 'model');
-                                chatHistory.push({ role: 'model', parts: [{ text: firstQuestion }] });
-                                currentQuestionIndex++; // <-- Also crucial here
-                                userInput.placeholder = "Type your answer..."; 
-                            }
-                        } else {
-                            // --- 1B-ii. User is just chatting ---
-                            // currentQuestionIndex stays 0
-                            const modelResponse = await callGeminiAPI(chatHistory); 
-                            displayMessage(modelResponse, 'model');
-                            chatHistory.push({ role: 'model', parts: [{ text: modelResponse }] });
-                            userInput.placeholder = "Ask me for a movie suggestion!"; // Guide the user
-                        }
-                    }
-
-                } else if (currentQuestionIndex > 0 && currentQuestionIndex <= dynamicQuestions.length) {
-                    // --- 2. Answering Questions Phase (Unchanged) ---
-                    displayMessage(text, 'user'); // <-- Step 1
-                    setLoading(true); // <-- Step 2
-                    userAnswers.push(text);
-                    chatHistory.push({ role: 'user', parts: [{ text }] });
-
-                    if (currentQuestionIndex < dynamicQuestions.length) {
-                        // Ask the next question
-                        const nextQuestion = dynamicQuestions[currentQuestionIndex];
-                        displayMessage(nextQuestion, 'model');
-                        chatHistory.push({ role: 'model', parts: [{ text: nextQuestion }] });
-                        currentQuestionIndex++;
-                    } else {
-                        // All questions answered, time to get movies
-                        displayMessage("Fantastic! Based on your answers, I'm finding some movies you might like...", 'model');
-                        currentQuestionIndex++; // Move past question phase
-                        await generateMovieSuggestions();
-                    }
-                } else if (currentQuestionIndex > dynamicQuestions.length) {
-                    // --- 3. Follow-up Chat Phase ---
-                    displayMessage(text, 'user'); // <-- Step 1
-                    setLoading(true); // <-- Step 2
-                    chatHistory.push({ role: 'user', parts: [{ text }] });
-
-                    // Check if user is asking about a specific movie from the suggested list (fast path)
-                    let foundMovie = suggestedMovies.find(movie => 
-                        movie.tmdb.title && text.toLowerCase().includes(movie.tmdb.title.toLowerCase())
-                    );
-
-                    if (foundMovie) {
-                        const movieDetails = await fetchMovieDetailsFromTMDB(foundMovie.tmdb.id);
-                        displayMovieDetails(movieDetails);
-                        chatHistory.push({ role: 'model', parts: [{ text: `Here are more details on ${movieDetails.title}.` }] });
-
-                    } else {
-                        // User is asking about a *new* movie or just general chat.
-                        // Use the same extraction logic from Step 1.
-                        const analysis = await callGeminiAPI(chatHistory, movieTitleExtractionInstruction, movieTitleExtractionSchema);
-
-                        if (analysis && analysis.movieTitle && analysis.movieTitle.trim() !== "") {
-                            // Gemini found a movie title! Let's search TMDB.
-                            // We can reuse the new helper function
-                            await searchAndDisplayMovie(analysis.movieTitle);
-                        } else {
-                            // Just a normal chat message, get a simple text response
-                            const modelResponse = await callGeminiAPI(chatHistory); 
-                            displayMessage(modelResponse, 'model');
-                            chatHistory.push({ role: 'model', parts: [{ text: modelResponse }] });
-                        }
+                    switch (analysis.intent) {
+                        case 'COMPARE':
+                            await handleComparison(analysis.entities);
+                            break;
+                        case 'RANDOM':
+                            await handleRandomMovie();
+                            break;
+                        case 'RECOMMEND':
+                            await startRecommendationFlow();
+                            break;
+                        case 'SPECIFIC':
+                            await handleSpecificQuery(analysis.entities, text);
+                            break;
+                        default: // CHAT
+                            await handleGeneralChat(text);
+                            break;
                     }
                 }
-                // --- OLD 'ELSE' for 'type start' is removed ---
-
             } catch (error) {
-                console.error('Error handling user response:', error);
-                displayMessage('Sorry, I ran into an error. Please try again.', 'model');
+                console.error(error);
+                addMessage('model', "Sorry, I encountered an error. Please try again.");
             } finally {
                 setLoading(false);
             }
         }
 
-        // --- NEW: GEMINI API CALL (FOR GENERATING QUESTIONS) ---
-        async function generateDynamicQuestions() {
-            const systemInstruction = {
-                parts: [{ text: "You are a creative interviewer. Generate 5 unique and interesting questions to understand a user's movie preferences. Return *only* a JSON array of strings, where each string is a question." }]
-            };
-            const schema = {
-                type: "ARRAY",
-                items: {
-                    type: "STRING"
-                }
-            };
-            const promptHistoryForQuestions = [ // New history just for question generation
-                { role: 'user', parts: [{ text: "Generate 5 unique movie preference questions." }] }
-            ];
+        // ==========================================
+        // HANDLERS
+        // ==========================================
 
-            try {
-                const newQuestions = await callGeminiAPI(promptHistoryForQuestions, systemInstruction, schema);
-                if (Array.isArray(newQuestions) && newQuestions.length === 5) {
-                    dynamicQuestions = newQuestions;
+        // --- 1. INTENT CLASSIFICATION ---
+        async function classifyIntent(userText) {
+            const prompt = `
+Analyze this user text: "${userText}".
+Classify into one of these intents:
+- COMPARE: asking to compare 2+ specific movies.
+- RANDOM: asking for a random suggestion, "pick for me", "surprise me".
+- RECOMMEND: asking for suggestions generally ("find me a movie", "good horror movies").
+- SPECIFIC: asking about a specific movie/actor/director details.
+- CHAT: general conversation.
+
+Extract entities (movie titles, names).
+Return JSON: { "intent": "STRING", "entities": ["String"] }
+            `;
+            const response = await callGeminiJSON(prompt);
+            return response || { intent: 'CHAT', entities: [] };
+        }
+
+        // --- 2. RECOMMENDATION FLOW (3 Questions) ---
+        async function startRecommendationFlow() {
+            currentState = STATE.ASKING_PREFS;
+            userPrefs = [];
+            currentQuestionIndex = 0;
+
+            // Generate 3 targeted questions
+            const prompt = "Generate exactly 3 short, engaging questions to understand a user's movie taste. Return JSON array of strings.";
+            prefQuestions = await callGeminiJSON(prompt);
+            
+            if (!prefQuestions || prefQuestions.length !== 3) {
+                prefQuestions = [
+                    "What genre are you in the mood for today?",
+                    "Do you prefer something classic or a modern release?",
+                    "Name a movie you watched recently and loved."
+                ];
+            }
+
+            addMessage('model', "Great! I'll find the perfect movie for you. First, " + prefQuestions[0]);
+            chatHistory.push({ role: 'model', parts: [{ text: prefQuestions[0] }] });
+        }
+
+        async function handlePreferenceAnswer(answer) {
+            userPrefs.push({ question: prefQuestions[currentQuestionIndex], answer: answer });
+            chatHistory.push({ role: 'user', parts: [{ text: answer }] });
+            
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < 3) {
+                const nextQ = prefQuestions[currentQuestionIndex];
+                addMessage('model', nextQ);
+                chatHistory.push({ role: 'model', parts: [{ text: nextQ }] });
+            } else {
+                // Finish Flow
+                addMessage('model', "Thanks! Analyzing your taste...");
+                currentState = STATE.CHATTING; // Reset state
+                await generateRecommendations();
+            }
+        }
+
+        async function generateRecommendations() {
+            const prefSummary = userPrefs.map(p => `Q: ${p.question} A: ${p.answer}`).join('\n');
+            const prompt = `
+Based on these preferences:
+${prefSummary}
+
+Suggest 5 movies. Return JSON array of objects: { "title": "Movie Title", "reason": "Short punchy reason" }
+            `;
+            
+            const suggestions = await callGeminiJSON(prompt);
+            if (!suggestions) return handleGeneralChat("I couldn't generate suggestions.");
+
+            addMessage('model', "Here are 5 movies tailored just for you:");
+            
+            // Fetch details and show carousel
+            const moviePromises = suggestions.map(s => searchTMDB(s.title));
+            const movieData = await Promise.all(moviePromises);
+            
+            // Merge reason into movie data
+            const validMovies = movieData.map((m, i) => m ? { ...m, reason: suggestions[i].reason } : null).filter(Boolean);
+            
+            renderCarousel(validMovies);
+            chatHistory.push({ role: 'model', parts: [{ text: "Provided movie suggestions." }] });
+        }
+
+        // --- 3. RANDOM MOVIE ---
+        async function handleRandomMovie() {
+            // Fetch a random page of popular movies
+            const randomPage = Math.floor(Math.random() * 50) + 1;
+            const url = `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&page=${randomPage}&vote_average.gte=6`;
+            
+            const res = await fetch(url);
+            const data = await res.json();
+            
+            if (data.results && data.results.length > 0) {
+                const randomMovie = data.results[Math.floor(Math.random() * data.results.length)];
+                const details = await fetchTMDBDetails(randomMovie.id);
+                
+                addMessage('model', "🎲 **Random Pick:**");
+                renderMovieCard(details, "A random selection from highly-rated popular movies.");
+                chatHistory.push({ role: 'model', parts: [{ text: `Suggested random movie: ${details.title}` }] });
+            } else {
+                addMessage('model', "Couldn't find a random movie right now.");
+            }
+        }
+
+        // --- 4. COMPARISON ---
+        async function handleComparison(entities) {
+            if (entities.length < 2) {
+                return handleGeneralChat(`Compare ${entities[0] || 'movies'}...`);
+            }
+
+            const [movieA, movieB] = entities;
+            const dataA = await searchTMDB(movieA);
+            const dataB = await searchTMDB(movieB);
+
+            if (!dataA || !dataB) {
+                addMessage('model', "I couldn't find details for one or both of those movies to compare.");
+                return;
+            }
+
+            // Get full details
+            const detailsA = await fetchTMDBDetails(dataA.id);
+            const detailsB = await fetchTMDBDetails(dataB.id);
+
+            // Ask Gemini to compare
+            const prompt = `
+Compare these two movies based on the data below. Highlight key differences in tone, style, and themes. Recommend one based on general appeal.
+Movie A: ${JSON.stringify(detailsA)}
+Movie B: ${JSON.stringify(detailsB)}
+            `;
+            const comparisonText = await callGeminiText(prompt);
+
+            // Render Side-by-Side
+            renderComparison(detailsA, detailsB);
+            addMessage('model', comparisonText);
+            chatHistory.push({ role: 'model', parts: [{ text: comparisonText }] });
+        }
+
+        // --- 5. SPECIFIC QUERY ---
+        async function handleSpecificQuery(entities, fullText) {
+            if (entities.length > 0) {
+                const movieName = entities[0];
+                const data = await searchTMDB(movieName);
+                
+                if (data) {
+                    const details = await fetchTMDBDetails(data.id);
+                    renderMovieCard(details);
+                    // Provide additional context from Gemini
+                    const contextPrompt = `The user asked: "${fullText}". The movie is ${details.title}. Provide a brief, friendly answer addressing their specific question.`;
+                    const contextResponse = await callGeminiText(contextPrompt);
+                    addMessage('model', contextResponse);
                 } else {
-                    console.warn("Gemini did not return 5 questions, using fallback.");
-                    dynamicQuestions = [...questions]; // Fallback to preset questions
+                    handleGeneralChat(fullText);
                 }
-            } catch (error) {
-                console.error("Error generating dynamic questions:", error);
-                displayMessage("Oops! I couldn't come up with new questions right now. I'll use some classic ones instead.", 'model');
-                dynamicQuestions = [...questions]; // Fallback to preset questions
+            } else {
+                handleGeneralChat(fullText);
             }
         }
 
-
-        // --- GEMINI API CALL (FOR MOVIE SUGGESTIONS) ---
-        async function generateMovieSuggestions() {
-            const preferences = dynamicQuestions.map((q, i) => `${q}: ${userAnswers[i]}`).join('\n');
-            
-            const systemInstruction = {
-                parts: [{ text: "You are a movie expert. Based on the user's preferences, suggest 5 movies. Return *only* a JSON array of objects, where each object has a 'title' (string) and 'oneliner' (a very brief, catchy, one-sentence tagline for the movie)." }]
-            };
-
-            const promptHistory = [
-                ...chatHistory, // Include previous chat history
-                { role: 'user', parts: [{ text: `Here are my preferences:\n${preferences}\nPlease give me 5 movie suggestions in the specified JSON format.` }] }
-            ];
-
-            const schema = {
-                type: "ARRAY",
-                items: {
-                    type: "OBJECT",
-                    properties: {
-                        "title": { "type": "STRING" },
-                        "oneliner": { "type": "STRING" }
-                    },
-                    required: ["title", "oneliner"]
-                }
-            };
-
-            try {
-                const movies = await callGeminiAPI(promptHistory, systemInstruction, schema);
-                
-                if (!Array.isArray(movies) || movies.length < 5) {
-                     // Need at least 5 movies
-                     throw new Error("Gemini did not return 5 movie suggestions.");
-                }
-
-                const movieDataPromises = movies.slice(0, 5).map(movie => 
-                    searchTMDB(movie.title, movie.oneliner) 
-                );
-                const movieDataArray = await Promise.all(movieDataPromises);
-                suggestedMovies = movieDataArray; // Store the movies
-
-                // --- NEW HORIZONTAL CAROUSEL LOGIC ---
-
-                // 1. Display the title message first
-                displayMessage("Here are 5 movies I think you'll enjoy:", 'model');
-                
-                // 2. Create the carousel container
-                const carouselContainer = document.createElement('div');
-                carouselContainer.className = 'w-full overflow-x-auto horizontal-scrollbar'; // Horizontal scroll
-                
-                const carouselInner = document.createElement('div');
-                carouselInner.className = 'flex space-x-4 p-2'; // Flex container for cards
-                
-                // 3. Populate the carousel
-                movieDataArray.forEach((data, index) => {
-                    if (!data || !data.tmdb) {
-                        return; // Skip if error
-                    }
-
-                    const tmdb = data.tmdb;
-                    const title = tmdb.title;
-                    const posterPath = tmdb.poster_path 
-                        ? `https://image.tmdb.org/t/p/w342/${tmdb.poster_path}` // w342 is a good card size
-                        : 'https://placehold.co/150x225/374151/9ca3af?text=No+Image';
-                    const rating = tmdb.vote_average ? tmdb.vote_average.toFixed(1) : 'N/A';
-                    const movieId = tmdb.id;
-
-                    const cardEl = document.createElement('div');
-                    cardEl.className = 'flex-shrink-0 w-40 rounded-lg bg-gray-900/50 backdrop-blur-sm border border-white/10 overflow-hidden shadow-lg';
-                    cardEl.innerHTML = `
-                        <img src="${posterPath}" alt="${title} poster" class="w-full h-56 object-cover poster-clickable" data-movie-id="${movieId}">
-                        <div class="p-2.5">
-                            <h4 class="text-sm font-bold truncate text-white">${title}</h4>
-                            <span class="text-xs font-semibold text-yellow-400 block mt-0.5">⭐ ${rating}</span>
-                            ${movieId ? `<button class="watch-trailer-btn bg-white text-black w-full mt-2 px-2 py-1.5 rounded-md font-bold text-xs hover:bg-gray-200 transition-colors" data-movie-id="${movieId}">Watch Trailer</button>` : ''}
-                        </div>
-                    `;
-                    
-                    // Add trailer button listener
-                    const trailerButton = cardEl.querySelector('.watch-trailer-btn');
-                    if (trailerButton) {
-                        trailerButton.addEventListener('click', async (e) => {
-                            e.stopPropagation(); // Prevent card click from firing too
-                            const id = e.target.dataset.movieId;
-                            if (id) await openTrailerModal(id);
-                        });
-                        // Add cursor hover for desktop
-                        if (!isTouchDevice) {
-                            trailerButton.addEventListener('mouseenter', () => {
-                                cursorFollowerEl.style.width = '45px';
-                                cursorFollowerEl.style.height = '45px';
-                            });
-                            trailerButton.addEventListener('mouseleave', () => {
-                                cursorFollowerEl.style.width = '30px';
-                                cursorFollowerEl.style.height = '30px';
-                            });
-                        }
-                    }
-                    
-                    // NEW: Add poster click listener
-                    const posterImage = cardEl.querySelector('.poster-clickable');
-                    if (posterImage) {
-                        if (!isTouchDevice) {
-                            // Add hover effects for the custom cursor
-                            posterImage.style.cursor = 'none'; // Handled by follower
-                            posterImage.addEventListener('mouseenter', () => {
-                                cursorFollowerEl.style.width = '45px';
-                                cursorFollowerEl.style.height = '45px';
-                            });
-                            posterImage.addEventListener('mouseleave', () => {
-                                cursorFollowerEl.style.width = '30px';
-                                cursorFollowerEl.style.height = '30px';
-                            });
-                        }
-                        posterImage.addEventListener('click', async (e) => {
-                            const id = e.target.dataset.movieId;
-                            if (id) {
-                                await showMovieCardDetails(id);
-                            }
-                        });
-                    }
-
-                    
-                    carouselInner.appendChild(cardEl);
-                });
-
-                carouselContainer.appendChild(carouselInner);
-                chatContainer.appendChild(carouselContainer); // Append carousel to chat
-                
-                // --- END HORIZONTAL CAROUSEL LOGIC ---
-
-
-                // 8. Scroll to bottom
-                scrollToBottom();
-
-                // Update chat history
-                chatHistory.push({ role: 'model', parts: [{ text: "Here are the 5 movies I suggested: " + movies.map(m => m.title).join(', ') }]});
-
-                // 9. Add the follow-up message *after* the list
-                displayMessage("What do you think of these? Feel free to ask me more about them!", 'model');
-
-            } catch (error)
-            {
-                console.error("Error generating movie suggestions:", error);
-                displayMessage("Sorry, I had trouble getting those suggestions. Let's try chatting instead.", 'model');
-            }
+        // --- 6. GENERAL CHAT ---
+        async function handleGeneralChat(text) {
+            chatHistory.push({ role: 'user', parts: [{ text }] });
+            const response = await callGeminiText(null, chatHistory); // Uses history
+            addMessage('model', response);
+            chatHistory.push({ role: 'model', parts: [{ text: response }] });
         }
 
-        // --- GEMINI API CALL (GENERAL) ---
-        async function callGeminiAPI(history, systemInstruction = null, schema = null) {
-            if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE") {
-                throw new Error("Invalid Gemini API Key. Please replace the placeholder.");
-            }
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${GEMINI_API_KEY}`;
-            
+        // ==========================================
+        // API HELPERS
+        // ==========================================
+
+        async function callGeminiJSON(prompt) {
             const payload = {
-                contents: history,
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: { responseMimeType: "application/json" }
             };
+            const result = await fetchGemini(payload);
+            return result ? JSON.parse(result) : null;
+        }
 
-            if (systemInstruction) {
-                payload.systemInstruction = systemInstruction;
-            }
-
-            if (schema) {
-                payload.generationConfig = {
-                    responseMimeType: "application/json",
-                    responseSchema: schema
-                };
-            }
+        async function callGeminiText(prompt, history = []) {
+            const contents = prompt ? [{ parts: [{ text: prompt }] }] : history;
             
-            let response;
-            let delay = 1000;
-            for (let i = 0; i < 3; i++) { // Retry mechanism
-                response = await fetch(apiUrl, {
+            // Enable Google Search Tool for grounding if available in this environment
+            const tools = [{ google_search: {} }];
+
+            const payload = {
+                contents: contents,
+                tools: tools
+            };
+            return await fetchGemini(payload);
+        }
+
+        async function fetchGemini(payload) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${GEMINI_API_KEY}`;
+            try {
+                const res = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-                if (response.ok) break;
-                if (response.status === 429 || response.status >= 500) {
-                    await new Promise(resolve => setTimeout(resolve, delay));
-                    delay *= 2;
-                } else {
-                    throw new Error(`API Error: ${response.status} ${response.statusText}`);
-                }
-            }
-
-            if (!response.ok) {
-                throw new Error(`API call failed after retries: ${response.status} ${response.statusText}`);
-            }
-            const result = await response.json();
-            if (!result.candidates || !result.candidates[0].content.parts[0]) {
-                 throw new Error("Invalid API response from Gemini.");
-            }
-            const text = result.candidates[0].content.parts[0].text;
-            return schema ? JSON.parse(text) : text;
-        }
-
-        // --- TMDB API CALL ---
-        async function searchTMDB(movieTitle, oneliner) { 
-            if (TMDB_API_KEY === "YOUR_TMDB_API_KEY_HERE") {
-                throw new Error("Invalid TMDB API Key. Please replace the placeholder.");
-            }
-            const searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(movieTitle)}`;
-            try {
-                const response = await fetch(searchUrl);
-                if (!response.ok) throw new Error('TMDB search failed');
-                const data = await response.json();
-                if (data.results && data.results.length > 0) {
-                    return { tmdb: data.results[0], oneliner: oneliner };
-                }
-                return { tmdb: { title: movieTitle }, oneliner: oneliner }; // Fallback with just title
-            } catch (error) {
-                console.error('Error fetching from TMDB:', error);
-                return { tmdb: { title: movieTitle }, oneliner: oneliner }; // Fallback with just title
+                const data = await res.json();
+                return data.candidates?.[0]?.content?.parts?.[0]?.text || "I'm having trouble thinking right now.";
+            } catch (e) {
+                console.error("Gemini API Error:", e);
+                return null;
             }
         }
 
-        // --- TMDB API CALL FOR DETAILS (INCLUDING VIDEOS) ---
-        async function fetchMovieDetailsFromTMDB(movieId) {
-            if (TMDB_API_KEY === "YOUR_TMDB_API_KEY_HERE") {
-                throw new Error("Invalid TMDB API Key. Please replace the placeholder.");
-            }
-            const detailUrl = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${TMDB_API_KEY}&append_to_response=credits,videos`; // Added ,videos
-            try {
-                const response = await fetch(detailUrl);
-                if (!response.ok) throw new Error('TMDB detail fetch failed');
-                const data = await response.json();
-                return data;
-            } catch (error) {
-                console.error('Error fetching movie details from TMDB:', error);
-                return null; // Fallback
-            }
+        async function searchTMDB(query) {
+            const url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}`;
+            const res = await fetch(url);
+            const data = await res.json();
+            return data.results?.[0] || null;
         }
 
-        // --- NEW HELPER FUNCTION TO SEARCH/DISPLAY (to avoid repeating code) ---
-        async function searchAndDisplayMovie(movieTitle) {
-            // Helper function to search TMDB and display details
-            try {
-                const searchData = await searchTMDB(movieTitle, "");
-                if (searchData && searchData.tmdb && searchData.tmdb.id) {
-                    const movieDetails = await fetchMovieDetailsFromTMDB(searchData.tmdb.id);
-                    displayMovieDetails(movieDetails);
-                    chatHistory.push({ role: 'model', parts: [{ text: `Here are details on ${movieDetails.title}.` }] });
-                } else {
-                    displayMessage(`Sorry, I couldn't find any details for "${movieTitle}".`, 'model');
-                    chatHistory.push({ role: 'model', parts: [{ text: "Couldn't find that movie." }] });
-                }
-            } catch (error) {
-                console.error("Error in searchAndDisplayMovie:", error);
-                displayMessage("Sorry, I ran into an error trying to find that movie.", 'model');
-            }
+        async function fetchTMDBDetails(id) {
+            const url = `https://api.themoviedb.org/3/movie/${id}?api_key=${TMDB_API_KEY}&append_to_response=credits,videos,release_dates`;
+            const res = await fetch(url);
+            return await res.json();
         }
 
+        // ==========================================
+        // UI RENDERERS
+        // ==========================================
 
-        // --- UI HELPER FUNCTIONS ---
-
-        function displayMessage(text, sender) {
-            const messageEl = document.createElement('div');
-            const bubbleEl = document.createElement('div');
-
-            if (sender === 'user') {
-                messageEl.className = 'flex justify-end';
-                bubbleEl.className = 'bg-white/30 text-white backdrop-blur-sm p-3 rounded-xl max-w-xs sm:max-w-sm md:max-w-md shadow-md';
-                bubbleEl.textContent = text;
-            } else {
-                messageEl.className = 'flex justify-start';
-                bubbleEl.className = 'bg-black/30 text-gray-200 backdrop-blur-sm p-3 rounded-xl max-w-xs sm:max-w-sm md:max-w-md shadow-md prose prose-invert prose-sm';
-                bubbleEl.innerHTML = marked.parse(text);
-            }
+        function addMessage(role, content) {
+            const div = document.createElement('div');
+            div.className = `flex w-full ${role === 'user' ? 'justify-end' : 'justify-start'} fade-in-up`;
             
-            messageEl.appendChild(bubbleEl);
-            chatContainer.appendChild(messageEl);
+            const bubble = document.createElement('div');
+            bubble.className = `max-w-[85%] md:max-w-[70%] rounded-2xl p-4 shadow-lg text-sm md:text-base leading-relaxed ${
+                role === 'user' 
+                ? 'bg-white text-black rounded-tr-none' 
+                : 'bg-white/10 backdrop-blur-md border border-white/10 text-gray-100 rounded-tl-none prose prose-invert'
+            }`;
+            
+            bubble.innerHTML = marked.parse(content);
+            div.appendChild(bubble);
+            els.chatContainer.appendChild(div);
             scrollToBottom();
         }
 
-        // --- UI HELPER FOR MOVIE DETAILS (REDESIGNED) ---
-        async function displayMovieDetails(movie) {
-            if (!movie) {
-                displayMessage("Sorry, I couldn't find details for that movie.", 'model');
-                return;
-            }
-
-            // 1. Create the message container
-            const messageEl = document.createElement('div');
-            messageEl.className = 'flex justify-start'; // Model message alignment
-
-            // 2. Create the bubble (the new card)
-            const bubbleEl = document.createElement('div');
-            bubbleEl.className = 'bg-black/30 backdrop-blur-sm rounded-xl shadow-md w-full max-w-md text-left overflow-hidden'; // Mobile-friendly max-width
-
-            // --- Helper data extraction ---
-            const posterPath = movie.poster_path 
-                ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
-                : 'https://placehold.co/300x450/374151/9ca3af?text=No+Poster';
+        function renderMovieCard(movie, customReason = null) {
+            const div = document.createElement('div');
+            div.className = "flex justify-start w-full fade-in-up";
             
-            // NEW: Get backdrop path, fallback to poster
-            const backdropPath = movie.backdrop_path
-                ? `https://image.tmdb.org/t/p/w780/${movie.backdrop_path}`
-                : posterPath;
+            const backdrop = movie.backdrop_path ? `https://image.tmdb.org/t/p/w780${movie.backdrop_path}` : null;
+            const poster = movie.poster_path ? `https://image.tmdb.org/t/p/w342${movie.poster_path}` : 'https://placehold.co/300x450?text=No+Image';
+            const year = movie.release_date ? movie.release_date.split('-')[0] : 'N/A';
+            const director = movie.credits?.crew?.find(c => c.job === 'Director')?.name || 'Unknown';
             
-            const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
-            const releaseDate = movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A';
-            const runtime = movie.runtime ? `${movie.runtime} min` : 'N/A';
-            const genres = movie.genres.map(g => g.name).join(', ');
-            const director = movie.credits.crew.find(c => c.job === 'Director')?.name || 'N/A';
-            const cast = movie.credits.cast.slice(0, 5); // Get top 5 cast objects
-            const tagline = movie.tagline ? `"${movie.tagline}"` : '';
-            const movieId = movie.id; // Get movie ID for trailer
-
-            // --- Build HTML for cast list (horizontal scroll) ---
-            const castHTML = cast.map(actor => {
-                const actorImgPath = actor.profile_path 
-                    ? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
-                    : 'https://placehold.co/100x150/454F63/9ca3af?text=No+Photo';
-                
-                return `
-                    <div class="flex flex-col items-center text-center w-24 flex-shrink-0">
-                        <img src="${actorImgPath}" alt="${actor.name}" class="w-20 h-20 rounded-full object-cover border-2 border-white/20 shadow-md">
-                        <span class="text-xs text-white mt-2">${actor.name}</span>
-                        <span class="text-xs text-gray-400">${actor.character}</span>
-                    </div>
-                `;
-            }).join('');
-            // --- END CAST HTML ---
-
-
-            // 3. Populate Bubble HTML (New Card Design)
-            bubbleEl.innerHTML = `
-                <!-- Backdrop Header --><div class="relative h-48 md:h-64">
-                    <img src="${backdropPath}" alt="${movie.title} backdrop" class="absolute inset-0 w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div> <!-- NEW: Gradient overlay -->
-                    <div class="absolute bottom-0 left-0 p-4">
-                        <h2 class="text-3xl font-bold text-white">${movie.title}</h2>
-                        <p class="text-md text-gray-300 italic mt-1">${tagline}</p>
-                    </div>
-                </div>
-                
-                <div class="p-4 space-y-4">
-                    <!-- Rating, Year, Runtime --><div class="flex flex-wrap gap-x-4 gap-y-2 text-sm text-gray-200">
-                        <span class="font-semibold text-yellow-400">⭐ ${rating} / 10</span>
-                        <span>${releaseDate}</span>
-                        <span>${runtime}</span>
-                    </div>
-                    
-                    <!-- Trailer Button -->${movieId ? `<div class="flex justify-start">
-                        <button class="watch-trailer-btn bg-white text-black px-6 py-2 rounded-lg font-bold text-sm hover:bg-gray-200 transition-colors" data-movie-id="${movieId}">Watch Trailer</button>
+            div.innerHTML = `
+                <div class="w-full max-w-md bg-[#1a1a1a] border border-white/10 rounded-xl overflow-hidden shadow-2xl relative group">
+                    ${backdrop ? `<div class="h-40 bg-cover bg-center relative" style="background-image: url('${backdrop}')">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] to-transparent"></div>
                     </div>` : ''}
                     
-                    <!-- Overview --><div>
-                        <h4 class="text-sm font-semibold text-gray-400 uppercase">Overview</h4>
-                        <p class="text-gray-200 prose prose-invert prose-sm">${movie.overview}</p>
-                    </div>
-                    
-                    <!-- Genres --><div>
-                        <h4 class="text-sm font-semibold text-gray-400 uppercase">Genres</h4>
-                        <p class="text-gray-200">${genres}</p>
-                    </div>
-                    
-                    <!-- Director --><div>
-                        <h4 class="text-sm font-semibold text-gray-400 uppercase mb-3">Director</h4>
-                        <p class="text-gray-200">${director}</p>
-                    </div>
-                    
-                    <!-- Starring (Horizontal Scroll) --><div>
-                        <h4 class="text-sm font-semibold text-gray-400 uppercase mb-3">Starring</h4>
-                        <div class="w-full overflow-x-auto horizontal-scrollbar">
-                            <div class="flex space-x-4">
-                                ${castHTML}
+                    <div class="p-5 ${backdrop ? '-mt-12' : ''} relative z-10 flex gap-4">
+                        <img src="${poster}" class="w-24 h-36 rounded-lg shadow-lg object-cover flex-shrink-0 border border-white/20">
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-xl font-bold text-white truncate leading-tight">${movie.title}</h3>
+                            <div class="flex items-center gap-2 mt-1 text-xs text-gray-400">
+                                <span class="bg-yellow-500/20 text-yellow-400 px-1.5 py-0.5 rounded border border-yellow-500/30">${movie.vote_average.toFixed(1)} ★</span>
+                                <span>${year}</span>
+                                <span>${movie.runtime}m</span>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-1 truncate">Dir. ${director}</p>
+                            <div class="mt-3 flex gap-2">
+                                <button onclick="openTrailer('${movie.id}')" class="bg-white text-black px-3 py-1.5 rounded text-xs font-bold hover:bg-gray-200 transition">Trailer</button>
+                                <button class="border border-white/20 text-white px-3 py-1.5 rounded text-xs hover:bg-white/10 transition">Details</button>
                             </div>
                         </div>
                     </div>
+                    
+                    ${customReason ? `<div class="px-5 pb-5 pt-0"><p class="text-sm text-gray-300 italic border-l-2 border-purple-500 pl-3">"${customReason}"</p></div>` : `
+                    <div class="px-5 pb-5 pt-0">
+                        <p class="text-sm text-gray-300 line-clamp-3">${movie.overview}</p>
+                    </div>`}
                 </div>
             `;
-
-            // 4. Append to chat
-            messageEl.appendChild(bubbleEl);
-            chatContainer.appendChild(messageEl);
-
-            // NEW: Add event listener for the "Watch Trailer" button in the detailed view
-            const detailTrailerButton = bubbleEl.querySelector('.watch-trailer-btn');
-            if (detailTrailerButton) {
-                if (!isTouchDevice) {
-                    detailTrailerButton.addEventListener('mouseenter', () => {
-                        cursorFollowerEl.style.width = '45px';
-                        cursorFollowerEl.style.height = '45px';
-                    });
-                    detailTrailerButton.addEventListener('mouseleave', () => {
-                        cursorFollowerEl.style.width = '30px';
-                        cursorFollowerEl.style.height = '30px';
-                    });
-                }
-                detailTrailerButton.addEventListener('click', async (e) => {
-                    const id = e.target.dataset.movieId;
-                    if (id) {
-                        await openTrailerModal(id);
-                    }
-                });
-            }
-
+            els.chatContainer.appendChild(div);
             scrollToBottom();
         }
 
-        // --- UPDATED: setLoading function ---
+        function renderCarousel(movies) {
+            const container = document.createElement('div');
+            container.className = "flex justify-start w-full fade-in-up my-2";
+            
+            const wrapper = document.createElement('div');
+            wrapper.className = "w-full overflow-x-auto pb-4 flex gap-4 px-1 snap-x";
+            
+            movies.forEach(m => {
+                const card = document.createElement('div');
+                card.className = "snap-center flex-shrink-0 w-40 bg-[#1a1a1a] border border-white/10 rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300 cursor-pointer";
+                card.innerHTML = `
+                    <div class="relative aspect-[2/3]">
+                        <img src="https://image.tmdb.org/t/p/w342${m.poster_path}" class="w-full h-full object-cover">
+                        <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black to-transparent p-2">
+                            <span class="text-xs font-bold text-white">${m.vote_average.toFixed(1)} ★</span>
+                        </div>
+                    </div>
+                    <div class="p-2">
+                        <h4 class="text-xs font-bold text-white truncate">${m.title}</h4>
+                        <p class="text-[10px] text-gray-400 truncate">${m.release_date?.split('-')[0] || ''}</p>
+                    </div>
+                `;
+                card.onclick = () => renderMovieCard(m, m.reason);
+                wrapper.appendChild(card);
+            });
+
+            container.appendChild(wrapper);
+            els.chatContainer.appendChild(container);
+            scrollToBottom();
+        }
+
+        function renderComparison(m1, m2) {
+            const container = document.createElement('div');
+            container.className = "flex justify-start w-full fade-in-up my-2";
+            
+            const wrapper = document.createElement('div');
+            wrapper.className = "w-full grid grid-cols-2 gap-2 md:gap-4 bg-white/5 p-3 rounded-xl border border-white/10";
+
+            [m1, m2].forEach(m => {
+                wrapper.innerHTML += `
+                    <div class="text-center">
+                        <img src="https://image.tmdb.org/t/p/w185${m.poster_path}" class="w-24 h-36 md:w-32 md:h-48 object-cover rounded-lg mx-auto shadow-md mb-2">
+                        <h4 class="text-sm font-bold text-white">${m.title}</h4>
+                        <p class="text-xs text-yellow-400">${m.vote_average.toFixed(1)} ★</p>
+                        <p class="text-xs text-gray-400 mt-1 line-clamp-2">${m.genres.map(g=>g.name).slice(0,2).join(', ')}</p>
+                    </div>
+                `;
+            });
+
+            container.appendChild(wrapper);
+            els.chatContainer.appendChild(container);
+            scrollToBottom();
+        }
+
         function setLoading(isLoading) {
             if (isLoading) {
-                // 1. Create and append new loading bubble
-                if (!currentLoadingEl) {
-                    const messageEl = document.createElement('div');
-                    messageEl.className = 'flex justify-start';
-                    
-                    const bubbleEl = document.createElement('div');
-                    bubbleEl.className = 'bg-black/30 text-gray-200 backdrop-blur-sm p-3 rounded-xl shadow-md inline-flex items-center';
-                    
-                    // --- MODIFIED: Updated text and spinner ---
-                    bubbleEl.innerHTML = `
+                const div = document.createElement('div');
+                div.id = "loading-bubble";
+                div.className = "flex justify-start fade-in-up";
+                div.innerHTML = `
+                    <div class="bg-white/10 backdrop-blur-md rounded-2xl px-4 py-3 flex items-center gap-2">
                         <span class="text-sm text-gray-300">Thinking</span>
                         <div class="elegant-spinner"></div>
-                    `;
-                    // --- END MODIFICATION ---
-                    
-                    messageEl.appendChild(bubbleEl);
-                    chatContainer.appendChild(messageEl);
-                    currentLoadingEl = messageEl; // Store reference
-                    scrollToBottom();
-                }
-                userInput.disabled = true;
-                sendButton.disabled = true;
+                    </div>
+                `;
+                els.chatContainer.appendChild(div);
+                currentLoadingEl = div;
+                els.input.disabled = true;
             } else {
-                // 2. Remove loading bubble
-                if (currentLoadingEl) {
-                    chatContainer.removeChild(currentLoadingEl);
-                    currentLoadingEl = null;
-                }
-                userInput.disabled = false;
-                sendButton.disabled = false;
-                userInput.focus();
+                if (currentLoadingEl) currentLoadingEl.remove();
+                els.input.disabled = false;
+                els.input.focus();
             }
+            scrollToBottom();
         }
 
-        // MODIFIED: Scrolls the main element now
         function scrollToBottom() {
-            mainScrollArea.scrollTop = mainScrollArea.scrollHeight;
+            requestAnimationFrame(() => {
+                els.mainScroll.scrollTop = els.mainScroll.scrollHeight;
+            });
         }
 
-        // --- NEW: TRAILER MODAL FUNCTIONS ---
-        async function openTrailerModal(movieId) {
+        // ==========================================
+        // GLOBAL HELPERS (Exposed to window)
+        // ==========================================
+        window.openTrailer = async (id) => {
             try {
-                const movieDetails = await fetchMovieDetailsFromTMDB(movieId);
-                if (movieDetails && movieDetails.videos && movieDetails.videos.results.length > 0) {
-                    const trailer = movieDetails.videos.results.find(video => video.type === 'Trailer' && video.site === 'YouTube') || movieDetails.videos.results[0]; // Fallback to first video
-                    
-                    if (trailer && trailer.site === 'YouTube') {
-                        trailerIframe.src = `https://www.youtube.com/embed/${trailer.key}?autoplay=1`;
-                        trailerModal.classList.add('open');
-                    } else {
-                        // Create a simple text alert inside the app
-                        displayMessage("Sorry, I couldn't find a YouTube trailer for this movie.", 'model');
-                    }
+                // 1. Reset src to ensure player refreshes
+                els.iframe.src = ""; 
+
+                // 2. Fetch details
+                const data = await fetchTMDBDetails(id);
+                
+                // 3. Find the best YouTube trailer
+                const results = data.videos?.results || [];
+                const trailer = results.find(v => v.site === 'YouTube' && v.type === 'Trailer') || results.find(v => v.site === 'YouTube');
+                
+                if (trailer) {
+                    // 4. Construct robust URL with origin to prevent blocking
+                    // 'origin' helps when running in restricted environments
+                    const origin = window.location.origin || ''; 
+                    els.iframe.src = `https://www.youtube.com/embed/${trailer.key}?autoplay=1&origin=${origin}`;
+                    els.trailerModal.classList.add('open');
                 } else {
-                    displayMessage("Sorry, no video information available for this movie.", 'model');
+                    alert("Sorry, no trailer found for this movie.");
                 }
-            } catch(e) {
-                 displayMessage("Sorry, I ran into an error trying to get the trailer.", 'model');
+            } catch (e) { 
+                console.error("Trailer Error:", e);
+                // Fallback alert if something strictly fails
+                alert("Unable to load trailer. Please check your network or API Key.");
             }
+        };
+
+        function closeModal() {
+            els.trailerModal.classList.remove('open');
+            els.iframe.src = "";
         }
 
-        function closeTrailerModal() {
-            trailerModal.classList.remove('open');
-            trailerIframe.src = ''; // Stop the video
+        function setupCursor() {
+            const dot = document.getElementById('cursor-dot');
+            const follower = document.getElementById('cursor-follower');
+            
+            window.addEventListener('mousemove', (e) => {
+                dot.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
+                follower.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
+            });
+
+            document.querySelectorAll('a, button, input').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    follower.style.width = '50px';
+                    follower.style.height = '50px';
+                    follower.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                });
+                el.addEventListener('mouseleave', () => {
+                    follower.style.width = '30px';
+                    follower.style.height = '30px';
+                    follower.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                });
+            });
         }
 
-        // --- START THE APP ---
+        // Start App
         init();
-
     </script>
 </body>
 </html>
