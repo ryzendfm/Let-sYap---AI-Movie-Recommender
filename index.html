@@ -264,10 +264,18 @@
             Chat Input Bar
             MODIFIED: Now FIXED to the bottom of the viewport
         --><div class="fixed bottom-0 left-0 right-0 w-full flex-shrink-0 p-4 z-20 bg-gradient-to-t from-black/50 via-black/30 to-transparent">
-            <div id="chat-input-container" class="w-full max-w-2xl mx-auto bg-white/10 backdrop-blur-lg rounded-full border border-white/20 shadow-2xl flex items-center p-2 pr-3">
-                <input type="text" id="user-input" class="flex-1 bg-transparent text-white placeholder-gray-300 px-5 py-3 outline-none" placeholder="Say 'hi' or ask for a movie...">
-                <button id="send-button" class="bg-white text-black px-8 py-2.5 rounded-full font-bold text-sm hover:bg-gray-200 transition-colors disabled:opacity-50">
-                    Send
+            <div id="chat-input-container" class="w-full max-w-2xl mx-auto bg-white/10 backdrop-blur-lg rounded-full border border-white/20 shadow-2xl flex items-center p-2 pr-2 md:pr-3">
+                <input type="text" id="user-input" class="flex-1 bg-transparent text-white placeholder-gray-300 px-4 md:px-5 py-3 outline-none min-w-0" placeholder="Say 'hi' or ask for a movie...">
+                
+                <!-- MODIFIED: Responsive Send Button -->
+                <!-- Uses flex to center content, different padding for mobile vs desktop -->
+                <button id="send-button" class="bg-white text-black p-3 md:px-8 md:py-2.5 rounded-full font-bold text-sm hover:bg-gray-200 transition-colors disabled:opacity-50 flex-shrink-0 flex items-center justify-center">
+                    <!-- Icon for Mobile -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 md:hidden">
+                        <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
+                    </svg>
+                    <!-- Text for Desktop -->
+                    <span class="hidden md:inline">Send</span>
                 </button>
             </div>
         </div>
